@@ -1,17 +1,37 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Card from "../Components/UI/card";
 import GradientButton from "../Components/UI/GradientButton";
 import GestureAILogo from "../Components/UI/Logo";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function LoginCard() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login attempt:", { email, password });
+    setError("");
+    setLoading(true);
+
+    try {
+      const { error } = await signIn(email, password);
+      if (error) {
+        setError(error.message);
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -102,18 +122,32 @@ export default function LoginCard() {
           </div>
 
           <div className="text-right">
-            <button className="text-[#009CFE] text-sm hover:text-blue-300 transition-colors">
+            <button
+              type="button"
+              onClick={() => navigate("/forgetpassword")}
+              className="text-[#009CFE] text-sm hover:text-blue-300 transition-colors"
+            >
               Forgot Password ?
             </button>
           </div>
 
-          <GradientButton onClick={handleSubmit}>Login</GradientButton>
+          {error && (
+            <p className="text-red-500 text-sm text-center">{error}</p>
+          )}
+
+          <GradientButton onClick={handleSubmit} disabled={loading}>
+            {loading ? "Loading..." : "Login"}
+          </GradientButton>
         </div>
 
         {/* Footer */}
         <p className="text-center text-gray-300 text-sm mt-6">
           Don't have an account ?{" "}
-          <button className="text-[#009CFE] hover:text-blue-300 transition-colors font-medium">
+          <button
+            type="button"
+            onClick={() => navigate("/signup")}
+            className="text-[#009CFE] hover:text-blue-300 transition-colors font-medium"
+          >
             Sign up
           </button>
         </p>

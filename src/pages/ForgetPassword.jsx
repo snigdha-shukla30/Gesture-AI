@@ -1,17 +1,37 @@
 import React, { useState } from "react";
 import { ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Card from "../Components/UI/card";
 import GradientButton from "../Components/UI/GradientButton";
 import GestureAILogo from "../Components/UI/Logo";
-
-
+import { useAuth } from "../contexts/AuthContext";
 
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { resetPassword } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login attempt:", { email });
+    setError("");
+    setSuccess(false);
+    setLoading(true);
+
+    try {
+      const { error } = await resetPassword(email);
+      if (error) {
+        setError(error.message);
+      } else {
+        setSuccess(true);
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -26,7 +46,11 @@ export default function ForgetPassword() {
         {/* Top Section */}
         <div className="flex flex-col mb-6 gap-2">
           <div className="flex items-center gap-3">
-            <button className="text-white hover:text-blue-400 transition-colors">
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+              className="text-white hover:text-blue-400 transition-colors"
+            >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <h2 className="text-[32px] font-bold text-white leading-[41px]">
@@ -67,6 +91,16 @@ export default function ForgetPassword() {
             }}
           />
 
+          {error && (
+            <p className="text-red-500 text-sm text-center">{error}</p>
+          )}
+
+          {success && (
+            <p className="text-green-500 text-sm text-center">
+              Password reset link sent! Check your email.
+            </p>
+          )}
+
           <div
             className="flex flex-col items-center mt-6"
             style={{
@@ -81,13 +115,18 @@ export default function ForgetPassword() {
             }}
           >
             <span>Didn't receive link?</span>
-            <button className="mt-1 text-[#009CFE] hover:text-blue-300 transition-colors font-medium">
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={loading}
+              className="mt-1 text-[#009CFE] hover:text-blue-300 transition-colors font-medium"
+            >
               Resend Link
             </button>
           </div>
 
-          <GradientButton onClick={handleSubmit}>
-            Send Reset Link
+          <GradientButton onClick={handleSubmit} disabled={loading}>
+            {loading ? "Sending..." : "Send Reset Link"}
           </GradientButton>
 
           <div className="flex justify-center my-6">

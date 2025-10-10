@@ -1,14 +1,51 @@
 import React, { useState } from "react";
 import { ChevronLeft, Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import GestureAILogo from "../Components/UI/Logo";
 import GradientButton from "../Components/UI/GradientButton";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { error } = await signUp(email, password);
+      if (error) {
+        setError(error.message);
+      } else {
+        navigate("/signupverified");
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -67,6 +104,8 @@ export default function Signup() {
               <input
                 type="text"
                 placeholder="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 className="w-[230px] h-[49px] px-4 text-md text-gray-300 placeholder-gray-500 rounded-[10px] outline-none transition-all"
                 style={{
                   border: "1.5px solid",
@@ -81,6 +120,8 @@ export default function Signup() {
               <input
                 type="text"
                 placeholder="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
                 className="w-[230px] h-[49px] px-4 text-md text-gray-300 placeholder-gray-500 rounded-[10px] outline-none transition-all"
                 style={{
                   border: "1.5px solid",
@@ -99,6 +140,8 @@ export default function Signup() {
               <input
                 type="email"
                 placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-[450px] h-[49px] px-4 text-md text-gray-300 placeholder-gray-500 rounded-[10px] outline-none transition-all"
                 style={{
                   border: "1.5px solid",
@@ -120,6 +163,8 @@ export default function Signup() {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Create A Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-[450px] h-[49px] px-4 text-md text-gray-300 placeholder-gray-500 rounded-[10px] outline-none transition-all"
                 style={{
                   border: "1.5px solid",
@@ -149,6 +194,8 @@ export default function Signup() {
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Re-enter Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-[450px] h-[49px] px-4 text-md text-gray-300 placeholder-gray-500 rounded-[10px] outline-none transition-all"
                 style={{
                   border: "1.5px solid",
@@ -173,15 +220,23 @@ export default function Signup() {
               </button>
             </div>
 
+            {error && (
+              <p className="text-red-500 text-sm text-center mb-4">{error}</p>
+            )}
+
             {/* Create Account Button */}
-            <GradientButton onClick={handleSubmit}>
-              Create Account
+            <GradientButton onClick={handleSubmit} disabled={loading}>
+              {loading ? "Creating Account..." : "Create Account"}
             </GradientButton>
 
             {/* Login Link */}
             <p className="text-center text-gray-300 text-sm mt-4">
               Already have an account ?{" "}
-              <button className="text-[#009CFE] hover:text-blue-300 transition-colors font-medium">
+              <button
+                type="button"
+                onClick={() => navigate("/login")}
+                className="text-[#009CFE] hover:text-blue-300 transition-colors font-medium"
+              >
                 Login
               </button>
             </p>
