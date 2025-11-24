@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 const AuthContext = createContext({});
 
@@ -15,7 +15,15 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const missingSupabaseError = () =>
+    new Error('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to continue.');
+
   useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) {
+      setLoading(false);
+      return undefined;
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setLoading(false);
@@ -31,6 +39,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const signUp = async (email, password) => {
+    if (!supabase) {
+      return { data: null, error: missingSupabaseError() };
+    }
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -39,6 +50,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signIn = async (email, password) => {
+    if (!supabase) {
+      return { data: null, error: missingSupabaseError() };
+    }
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -47,11 +61,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signOut = async () => {
+    if (!supabase) {
+      return { error: missingSupabaseError() };
+    }
     const { error } = await supabase.auth.signOut();
     return { error };
   };
 
   const resetPassword = async (email) => {
+    if (!supabase) {
+      return { data: null, error: missingSupabaseError() };
+    }
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
     });
