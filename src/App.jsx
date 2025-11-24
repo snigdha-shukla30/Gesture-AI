@@ -2,11 +2,11 @@
 
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import LoginCard from '../src/pages/Login';
-import ForgetPassword from '../src/pages/ForgetPassword';
-import EmailVerification from '../src/pages/EmailVerification'
-import Signup from '../src/pages/Signup';
-import SignupVerified from '../src/pages/SignupVerified';
+import LoginCard from './pages/Login';
+import ForgetPassword from './pages/ForgetPassword';
+import EmailVerification from './pages/EmailVerification';
+import Signup from './pages/Signup';
+import SignupVerified from './pages/SignupVerified';
 
 function App() {
   return (
