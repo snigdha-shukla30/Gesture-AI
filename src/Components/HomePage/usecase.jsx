@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react';
-import { GraduationCap, Building2, Briefcase, Users, Heart } from 'lucide-react';
+import React, { useEffect, useRef } from "react";
 
 export default function UseCase() {
   const useCaseRef = useRef(null);
@@ -9,17 +8,23 @@ export default function UseCase() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const elements = entry.target.querySelectorAll('[data-animate]');
+            const elements = entry.target.querySelectorAll("[data-animate]");
             elements.forEach((el, index) => {
               setTimeout(() => {
-                el.style.opacity = '1';
+                el.style.opacity = "1";
                 const initialTransform = el.style.transform;
-                if (initialTransform.includes('translateY')) {
-                  el.style.transform = initialTransform.replace(/translateY\([^)]+\)/, 'translateY(0)');
-                } else if (initialTransform.includes('translateX')) {
-                  el.style.transform = initialTransform.replace(/translateX\([^)]+\)/, 'translateX(0)');
+                if (initialTransform.includes("translateY")) {
+                  el.style.transform = initialTransform.replace(
+                    /translateY\([^)]+\)/,
+                    "translateY(0)"
+                  );
+                } else if (initialTransform.includes("translateX")) {
+                  el.style.transform = initialTransform.replace(
+                    /translateX\([^)]+\)/,
+                    "translateX(0)"
+                  );
                 } else {
-                  el.style.transform = 'translateY(0)';
+                  el.style.transform = "translateY(0)";
                 }
               }, index * 150);
             });
@@ -31,18 +36,15 @@ export default function UseCase() {
     );
 
     const currentRef = useCaseRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
+    if (currentRef) observer.observe(currentRef);
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
+      if (currentRef) observer.unobserve(currentRef);
     };
   }, []);
 
-  const UseCaseCard = ({ icon: Icon, title, description, animate, delay }) => (
+  // ⭐ FIXED VERSION: PNG icon support useCaseCard
+  const UseCaseCard = ({ icon, title, description, animate, delay }) => (
     <div
       data-animate
       className="flex flex-col items-center text-center"
@@ -55,34 +57,41 @@ export default function UseCase() {
       <div
         className="rounded-full flex items-center justify-center mb-4"
         style={{
-          width: '80px',
-          height: '80px',
-          background: 'linear-gradient(135deg, #9A5ACB 0%, #7B3FA3 100%)',
-          boxShadow: '0 8px 24px rgba(154, 90, 203, 0.3)',
+          width: "80px",
+          height: "80px",
+          background: "linear-gradient(135deg, #9A5ACB 0%, #7B3FA3 100%)",
+          boxShadow: "0 8px 24px rgba(154, 90, 203, 0.3)",
         }}
       >
-        <Icon size={40} color="#ffffff" strokeWidth={2} />
+        {/* PNG ICON */}
+        <img
+          src={icon}
+          alt={title}
+          style={{ width: "40px", height: "40px" }}
+        />
       </div>
+
       <h3
         className="text-white mb-3"
         style={{
           fontFamily: "'Baloo Bhai 2', sans-serif",
           fontWeight: 800,
-          fontSize: '20px',
-          lineHeight: '1.4em',
-          maxWidth: '280px',
+          fontSize: "20px",
+          lineHeight: "1.4em",
+          maxWidth: "280px",
         }}
       >
         {title}
       </h3>
+
       <p
         style={{
           fontFamily: "'Poppins', sans-serif",
           fontWeight: 400,
-          fontSize: '13px',
-          lineHeight: '1.8em',
-          color: '#9CA3AF',
-          maxWidth: '300px',
+          fontSize: "13px",
+          lineHeight: "1.8em",
+          color: "#9CA3AF",
+          maxWidth: "300px",
         }}
       >
         {description}
@@ -95,7 +104,7 @@ export default function UseCase() {
       ref={useCaseRef}
       className="relative w-full min-h-screen flex flex-col items-center justify-center py-20 px-6"
       style={{
-        background: '#1F1E23',
+        background: "#1F1E23",
       }}
     >
       {/* Main Title */}
@@ -103,14 +112,14 @@ export default function UseCase() {
         data-animate
         className="text-white text-center mb-6"
         style={{
-          fontFamily: "'Baloo Bhai 2', sans-serif",
+          fontFamily: "'BalooBhai2', sans-serif",
           fontWeight: 800,
-          fontSize: '42px',
-          lineHeight: '1.3em',
-          maxWidth: '800px',
+          fontSize: "42px",
+          lineHeight: "1.3em",
+          maxWidth: "800px",
           opacity: 0,
-          transform: 'translateY(20px)',
-          transition: 'opacity 0.8s ease-in-out, transform 0.8s ease-in-out',
+          transform: "translateY(20px)",
+          transition: "opacity 0.8s ease-in-out, transform 0.8s ease-in-out",
         }}
       >
         The best site to understand mute people.
@@ -123,16 +132,17 @@ export default function UseCase() {
         style={{
           fontFamily: "'Poppins', sans-serif",
           fontWeight: 400,
-          fontSize: '16px',
-          lineHeight: '1.8em',
-          color: '#9CA3AF',
-          maxWidth: '650px',
+          fontSize: "16px",
+          lineHeight: "1.8em",
+          color: "#9CA3AF",
+          maxWidth: "650px",
           opacity: 0,
-          transform: 'translateY(20px)',
-          transition: 'opacity 0.8s ease-in-out 0.2s, transform 0.8s ease-in-out 0.2s',
+          transform: "translateY(20px)",
+          transition:
+            "opacity 0.8s ease-in-out 0.2s, transform 0.8s ease-in-out 0.2s",
         }}
       >
-        Gesture AI is built to bridge the communication gap between non-verbal individuals and the rest of the world. Through real-time AI translation, it transforms sign language into words, making conversations effortless, inclusive, and full of understanding — because connection should never be limited by silence.
+        Gesture AI is built to bridge the communication gap...
       </p>
 
       {/* Use Cases Grid */}
@@ -140,23 +150,25 @@ export default function UseCase() {
         {/* First Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
           <UseCaseCard
-            icon={GraduationCap}
+            icon="/icons/book.png"
             title="Schools for special education"
-            description="Gesture AI helps teachers and students communicate seamlessly, making lessons more interactive. It ensures every student, regardless of ability, can participate fully and confidently."
+            description="Gesture AI helps teachers and students communicate..."
             animate="translateY(20px)"
             delay={0.4}
           />
+
           <UseCaseCard
-            icon={Building2}
+            icon="/icons/hospital.png"
             title="Hospitals and reception desks"
-            description="Patients can express themselves clearly without struggling to speak. Staff can understand needs instantly, improving care and reducing stress for everyone."
+            description="Patients can express themselves clearly..."
             animate="translateY(20px)"
             delay={0.5}
           />
+
           <UseCaseCard
-            icon={Briefcase}
+            icon="/icons/services.png"
             title="Public service offices"
-            description="From government counters to local offices, communication becomes effortless. Non-verbal individuals can access services quickly, accurately, and independently."
+            description="Government counters, local offices, and more..."
             animate="translateY(20px)"
             delay={0.6}
           />
@@ -165,52 +177,50 @@ export default function UseCase() {
         {/* Second Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-3xl mx-auto">
           <UseCaseCard
-            icon={Users}
+            icon="/icons/business.png"
             title="Businesses improving accessibility"
-            description="Companies can make workplaces and customer interactions more inclusive. Gesture AI helps staff and clients communicate smoothly, enhancing service quality."
+            description="Companies can make workplaces more inclusive..."
             animate="translateY(20px)"
             delay={0.8}
           />
+
           <UseCaseCard
-            icon={Heart}
+            icon="/icons/family.png"
             title="Families communicating"
-            description="Make home conversations more natural and connected. Gesture AI helps loved ones understand each other, turning gestures into meaningful words."
+            description="Make home conversations more natural..."
             animate="translateY(20px)"
             delay={1.0}
           />
         </div>
       </div>
 
-      {/* CTA Button */}
+      {/* CTA */}
       <div
         data-animate
         style={{
           opacity: 0,
-          transform: 'translateY(20px)',
-          transition: 'opacity 0.8s ease-in-out 1.2s, transform 0.8s ease-in-out 1.2s',
+          transform: "translateY(20px)",
+          transition:
+            "opacity 0.8s ease-in-out 1.2s, transform 0.8s ease-in-out 1.2s",
         }}
       >
         <div
           className="rounded-lg"
           style={{
-            padding: '2px',
-            background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.8) 0%, rgba(131, 131, 131, 0.6) 100%)',
-            borderRadius: '10px',
+            padding: "2px",
+            background:
+              "linear-gradient(90deg, rgba(255, 255, 255, 0.8) 0%, rgba(131, 131, 131, 0.6) 100%)",
+            borderRadius: "10px",
           }}
         >
           <button
             className="flex items-center justify-center gap-2.5 text-white rounded-lg hover:scale-105 transition-transform duration-300"
             style={{
-              background: 'linear-gradient(90deg, #345DB7 0%, #26255A 100%)',
-              border: 'none',
+              background: "linear-gradient(90deg, #345DB7 0%, #26255A 100%)",
               fontFamily: "'Poppins', sans-serif",
               fontWeight: 600,
-              fontSize: '16px',
-              lineHeight: '1.5em',
-              textAlign: 'center',
-              boxShadow: '0 4px 16px rgba(52, 93, 183, 0.3), inset 0px 2px 4px rgba(255, 255, 255, 0.1)',
-              cursor: 'pointer',
-              padding: '14px 32px',
+              fontSize: "16px",
+              padding: "14px 32px",
             }}
           >
             See Gesture AI in Action
@@ -220,3 +230,11 @@ export default function UseCase() {
     </div>
   );
 }
+
+
+
+
+
+
+
+

@@ -1,4 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
+import GestureAILogo from "../UI/Logo";
+
 
 export default function Footer() {
   const footerRef = useRef(null);
@@ -8,17 +10,23 @@ export default function Footer() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const elements = entry.target.querySelectorAll('[data-animate]');
+            const elements = entry.target.querySelectorAll("[data-animate]");
             elements.forEach((el, index) => {
               setTimeout(() => {
-                el.style.opacity = '1';
+                el.style.opacity = "1";
                 const initialTransform = el.style.transform;
-                if (initialTransform.includes('translateY')) {
-                  el.style.transform = initialTransform.replace(/translateY\([^)]+\)/, 'translateY(0)');
-                } else if (initialTransform.includes('translateX')) {
-                  el.style.transform = initialTransform.replace(/translateX\([^)]+\)/, 'translateX(0)');
+                if (initialTransform.includes("translateY")) {
+                  el.style.transform = initialTransform.replace(
+                    /translateY\([^)]+\)/,
+                    "translateY(0)"
+                  );
+                } else if (initialTransform.includes("translateX")) {
+                  el.style.transform = initialTransform.replace(
+                    /translateX\([^)]+\)/,
+                    "translateX(0)"
+                  );
                 } else {
-                  el.style.transform = 'translateY(0)';
+                  el.style.transform = "translateY(0)";
                 }
               }, index * 100);
             });
@@ -47,125 +55,130 @@ export default function Footer() {
       <div
         className="relative w-full overflow-hidden"
         style={{
-          height: '366px',
-          background: '#040311',
+          height: "366px",
+          background: "#040311",
         }}
       >
         <div
           data-animate
           className="absolute"
           style={{
-            left: '101px',
-            top: '90px',
-            width: '1159px',
-            height: '187px',
-            borderRadius: '20px',
-            background: 'linear-gradient(225deg, rgba(30, 86, 121, 1) 0%, rgba(163, 89, 228, 1) 100%)',
+            left: "170px",
+            top: "90px",
+            width: "1159px",
+            height: "187px",
+            borderRadius: "20px",
+            background:
+              "linear-gradient(225deg, rgba(30, 86, 121, 1) 0%, rgba(163, 89, 228, 1) 100%)",
             opacity: 0,
-            transform: 'translateY(30px)',
-            transition: 'opacity 0.8s ease-in-out, transform 0.8s ease-in-out',
+            transform: "translateY(30px)",
+            transition: "opacity 0.8s ease-in-out, transform 0.8s ease-in-out",
           }}
         >
           {/* Content */}
           <div
             className="absolute"
             style={{
-              left: '30px',
-              top: '21px',
-              width: '683px',
-              height: '85px',
+              left: "30px",
+              top: "21px",
+              width: "683px",
+              height: "85px",
             }}
           >
             <h3
               className="text-white"
               style={{
-                fontFamily: "'Baloo Bhai 2', sans-serif",
+                fontFamily: "'BalooBhai2', sans-serif",
                 fontWeight: 800,
-                fontSize: '40px',
-                lineHeight: '1.25em',
+                fontSize: "40px",
+                lineHeight: "1.25em",
                 margin: 0,
               }}
             >
-              Stay connected with ous
+              Stay connected with us
             </h3>
             <p
               className="text-white"
               style={{
                 fontFamily: "'Poppins', sans-serif",
                 fontWeight: 500,
-                fontSize: '16px',
-                lineHeight: '1.875em',
-                marginTop: '5px',
+                fontSize: "16px",
+                lineHeight: "1.875em",
+                marginTop: "5px",
               }}
             >
-              We are open for feedbacks and do not forget to follow our socials for future updates .
+              We are open for feedbacks and do not forget to follow our socials
+              for future updates.
             </p>
           </div>
 
           {/* Discord Button */}
           <div
-            className="absolute flex items-center gap-2 px-3.75 py-2 rounded-xl"
+            className="absolute flex items-center gap-2 px-3.75 py-2 rounded-xl cursor-pointer hover:shadow-lg"
             style={{
-              left: '827.72px',
-              top: '115px',
-              background: '#FFFFFF',
-              // border: '2px solid',
-              // borderImage: 'linear-gradient(90deg, rgba(255, 0, 238, 1) 0%, rgba(170, 135, 135, 1) 100%) 1',
-              borderRadius: '12px',
+              left: "827.72px",
+              top: "115px",
+              background: "#FFFFFF",
+              borderRadius: "12px",
+              transition: "all 0.3s ease",
             }}
           >
-            <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="11.5" cy="11.5" r="11.5" fill="#5865F2"/>
-              <path d="M8 7L15 11L8 15V7Z" fill="white"/>
-            </svg>
-            <span
-              className="text-white"
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 700,
-                fontSize: '16px',
-                lineHeight: '1.5em',
-                color: '#5857A8',
-              }}
-            >
-              Discord
-            </span>
+            <a href="#discord" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+              <img 
+                src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" 
+                alt="Discord"
+                width="26"
+                height="26"
+                style={{ objectFit: "contain" }}
+              />
+              <span
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 700,
+                  fontSize: "16px",
+                  lineHeight: "1.5em",
+                  color: "#5865F2",
+                }}
+              >
+                Discord
+              </span>
+            </a>
           </div>
 
           {/* Instagram Button */}
           <div
-            className="absolute flex items-center gap-2 px-3.75 py-2 rounded-xl"
+            className="absolute flex items-center gap-2 px-3.75 py-2 rounded-xl cursor-pointer hover:shadow-lg"
             style={{
-              left: '968.22px',
-              top: '115px',
-              background: '#FFFFFF',
-              // border: '2px solid',
-              // borderImage: 'linear-gradient(90deg, rgba(255, 0, 238, 1) 0%, rgba(170, 135, 135, 1) 100%) 1',
-              borderRadius: '12px',
+              left: "968.22px",
+              top: "115px",
+              background: "#FFFFFF",
+              borderRadius: "12px",
+              transition: "all 0.3s ease",
             }}
           >
-            <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="2" width="19" height="19" rx="4" fill="url(#instagram-gradient)"/>
-              <defs>
-                <linearGradient id="instagram-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#FFDD55"/>
-                  <stop offset="50%" stopColor="#FF543E"/>
-                  <stop offset="100%" stopColor="#C837AB"/>
-                </linearGradient>
-              </defs>
-            </svg>
-            <span
-              className="text-white"
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 700,
-                fontSize: '16px',
-                lineHeight: '1.5em',
-                color: '#5857A8',
-              }}
+            <a
+              href="#instagram"
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
-              Instagram
-            </span>
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" 
+                alt="Instagram"
+                width="26"
+                height="26"
+                style={{ objectFit: "contain" }}
+              />
+              <span
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 700,
+                  fontSize: "16px",
+                  lineHeight: "1.5em",
+                  color: "#E4405F",
+                }}
+              >
+                Instagram
+              </span>
+            </a>
           </div>
         </div>
       </div>
@@ -174,20 +187,20 @@ export default function Footer() {
       <div
         className="relative w-full overflow-hidden"
         style={{
-          height: '206px',
-          background: '#000000',
+          height: "206px",
+          background: "#000000",
         }}
       >
         {/* Divider Line */}
         <div
           className="absolute"
           style={{
-            left: '-1px',
-            top: '146px',
-            width: '1361px',
-            height: '2px',
-            background: '#D9D9D9',
-            borderRadius: '43px',
+            left: "-1px",
+            top: "146px",
+            width: "1520px",
+            height: "2px",
+            background: "#D9D9D9",
+            borderRadius: "43px",
           }}
         />
 
@@ -196,21 +209,16 @@ export default function Footer() {
           data-animate
           className="absolute text-white"
           style={{
-            left: '92px',
-            top: '56px',
-            width: '190px',
-            height: '51px',
-            fontFamily: "'Paprika', sans-serif",
-            fontWeight: 400,
-            fontSize: '36px',
-            lineHeight: '1.419em',
-            textAlign: 'center',
+            left: "92px",
+            top: "32px",
+            
+            textAlign: "center",
             opacity: 0,
-            transform: 'translateY(20px)',
-            transition: 'opacity 0.8s ease-in-out, transform 0.8s ease-in-out',
+            transform: "translateY(20px)",
+            transition: "opacity 0.8s ease-in-out, transform 0.8s ease-in-out",
           }}
         >
-          Gesture AI
+         <GestureAILogo />
         </div>
 
         {/* Footer Links */}
@@ -218,11 +226,12 @@ export default function Footer() {
           data-animate
           className="absolute flex items-center gap-6"
           style={{
-            left: '431px',
-            top: '70px',
+            left: "525px",
+            top: "70px",
             opacity: 0,
-            transform: 'translateY(20px)',
-            transition: 'opacity 0.8s ease-in-out 0.2s, transform 0.8s ease-in-out 0.2s',
+            transform: "translateY(20px)",
+            transition:
+              "opacity 0.8s ease-in-out 0.2s, transform 0.8s ease-in-out 0.2s",
           }}
         >
           <a
@@ -231,9 +240,9 @@ export default function Footer() {
             style={{
               fontFamily: "'Paprika', sans-serif",
               fontWeight: 400,
-              fontSize: '16px',
-              lineHeight: '1.419em',
-              textAlign: 'center',
+              fontSize: "16px",
+              lineHeight: "1.419em",
+              textAlign: "center",
             }}
           >
             Terms of Services
@@ -244,9 +253,9 @@ export default function Footer() {
             style={{
               fontFamily: "'Paprika', sans-serif",
               fontWeight: 400,
-              fontSize: '16px',
-              lineHeight: '1.419em',
-              textAlign: 'center',
+              fontSize: "16px",
+              lineHeight: "1.419em",
+              textAlign: "center",
             }}
           >
             Privacy Policy
@@ -257,9 +266,9 @@ export default function Footer() {
             style={{
               fontFamily: "'Paprika', sans-serif",
               fontWeight: 400,
-              fontSize: '16px',
-              lineHeight: '1.419em',
-              textAlign: 'center',
+              fontSize: "16px",
+              lineHeight: "1.419em",
+              textAlign: "center",
             }}
           >
             Community Guidelines
@@ -271,18 +280,19 @@ export default function Footer() {
           data-animate
           className="absolute"
           style={{
-            left: '501px',
-            top: '160px',
-            width: '318px',
-            height: '23px',
+            left: "600px",
+            top: "160px",
+            width: "318px",
+            height: "23px",
             fontFamily: "'Paprika', sans-serif",
             fontWeight: 400,
-            fontSize: '16px',
-            lineHeight: '1.419em',
-            color: '#838383',
+            fontSize: "16px",
+            lineHeight: "1.419em",
+            color: "#838383",
             opacity: 0,
-            transform: 'translateY(20px)',
-            transition: 'opacity 0.8s ease-in-out 0.4s, transform 0.8s ease-in-out 0.4s',
+            transform: "translateY(20px)",
+            transition:
+              "opacity 0.8s ease-in-out 0.4s, transform 0.8s ease-in-out 0.4s",
           }}
         >
           All rights reserved. Gesture AI Pvt LTD.
@@ -293,53 +303,64 @@ export default function Footer() {
           data-animate
           className="absolute flex items-center gap-4"
           style={{
-            right: '54px',
-            top: '70px',
+            right: "54px",
+            top: "70px",
             opacity: 0,
-            transform: 'translateY(20px)',
-            transition: 'opacity 0.8s ease-in-out 0.6s, transform 0.8s ease-in-out 0.6s',
+            transform: "translateY(20px)",
+            transition:
+              "opacity 0.8s ease-in-out 0.6s, transform 0.8s ease-in-out 0.6s",
           }}
         >
           {/* Discord */}
-          <a href="#discord" className="hover:opacity-80 transition-opacity">
-            <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="11.5" cy="11.5" r="11.5" fill="#5865F2"/>
-              <path d="M8 7L15 11L8 15V7Z" fill="white"/>
-            </svg>
+          <a href="#discord" className="hover:scale-110 transition-transform">
+            <img 
+              src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png"
+              alt="Discord"
+              width="32"
+              height="32"
+              style={{ objectFit: "contain", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))" }}
+            />
           </a>
 
           {/* Twitter */}
-          <a href="#twitter" className="hover:opacity-80 transition-opacity">
-            <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="11.5" cy="11.5" r="11.5" fill="#1D9BF0"/>
-              <path d="M7 9L16 7L14 16L10 12L7 9Z" fill="white"/>
-            </svg>
+          <a href="#twitter" className="hover:scale-110 transition-transform">
+            <img 
+              src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
+              alt="Twitter"
+              width="32"
+              height="32"
+              style={{ objectFit: "contain", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))" }}
+            />
           </a>
 
           {/* Instagram */}
-          <a href="#instagram" className="hover:opacity-80 transition-opacity">
-            <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="2" width="19" height="19" rx="4" fill="url(#instagram-gradient-footer)"/>
-              <defs>
-                <linearGradient id="instagram-gradient-footer" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#FFDD55"/>
-                  <stop offset="50%" stopColor="#FF543E"/>
-                  <stop offset="100%" stopColor="#C837AB"/>
-                </linearGradient>
-              </defs>
-            </svg>
+          <a href="#instagram" className="hover:scale-110 transition-transform">
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
+              alt="Instagram"
+              width="32"
+              height="32"
+              style={{ objectFit: "contain", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))" }}
+            />
           </a>
 
           {/* Facebook */}
-          <a href="#facebook" className="hover:opacity-80 transition-opacity">
-            <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="11.5" cy="11.5" r="11.5" fill="#3D5A98"/>
-              <path d="M13 6H15V9H13V11H15V14H13V18H10V14H8V11H10V9H8V6H10V8H12V6H13Z" fill="white"/>
-            </svg>
+          <a href="#facebook" className="hover:scale-110 transition-transform">
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png"
+              alt="Facebook"
+              width="32"
+              height="32"
+              style={{ objectFit: "contain", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))" }}
+            />
           </a>
         </div>
       </div>
     </div>
   );
 }
+
+
+
+
 
