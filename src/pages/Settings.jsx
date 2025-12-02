@@ -42,7 +42,7 @@ export default function Settings() {
           }}
         >
           <img
-            src="/src/assets/login-logos/call image.jpg"
+            src="/Login/callimage.jpg"
             alt="avatar"
             className="w-full h-full object-cover rounded-full"
           />

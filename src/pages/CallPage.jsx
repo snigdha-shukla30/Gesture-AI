@@ -28,7 +28,7 @@ export default function CallPage() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col relative">
         {/* Gesture AI Logo Text — kept exactly where it was */}
-        <GestureAILogo top="28px" left="110px" />
+        <GestureAILogo top="20px" left="110px" />
 
         {/* Video Feed */}
         <div className="flex-1 p-6 flex items-start justify-start">
@@ -36,9 +36,9 @@ export default function CallPage() {
           <div
             className="relative rounded-[30px] p-[1.5px]"
             style={{
-              width: "1000px",
+              width: "1020px",
               height: "576px",
-              top: "89px",
+              top: "61px",
               left: "50px",
               background:
                 "linear-gradient(102.38deg, #3361F8 2.72%, #1E3992 36.75%)",
@@ -53,7 +53,7 @@ export default function CallPage() {
               }}
             >
               <img
-                src="/src/assets/login-logos/call image.jpg"
+                src="/Login/callimage.jpg"
                 alt="Person using sign language"
                 className="w-full h-full object-cover"
                 style={{
@@ -66,19 +66,21 @@ export default function CallPage() {
       </div>
 
       {/* Right Sidebar (unchanged layout) */}
-      <div className="w-80 flex flex-col h-screen overflow-hidden">
+      <div className="w-80 flex flex-col h-screen overflow-hidden ">
         {/* Chat Header */}
-        <div className="flex items-center space-x-3 p-4">
+        <div className="flex items-center  space-x-3 p-4">
           {/* Avatar */}
           <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
             <img
-              src="/src/assets/login-logos/call image.jpg"
+              src="/Login/callimage.jpg"
               alt="Person using sign language"
               className="w-full h-full object-cover rounded-full"
             />
           </div>
 
-          <div>
+          
+
+          <div >
             <div
               style={{
                 fontFamily: "'Paprika', sans-serif",
