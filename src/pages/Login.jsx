@@ -40,7 +40,9 @@ export default function LoginCard() {
       style={{ backgroundImage: "url('/Login/login-bg.jpg')" }}
     >
       {/* Gesture AI Logo Text */}
-      <GestureAILogo top="28px" left="46px" />
+      <div onClick={() => navigate("/")} className="cursor-pointer">
+        <GestureAILogo top="28px" left="46px" />
+      </div>
 
       {/* Card Wrapper */}
 
@@ -48,7 +50,10 @@ export default function LoginCard() {
         {/* Top Section */}
         <div className="flex flex-col mb-6 gap-2">
           <div className="flex items-center gap-3">
-            <button className="text-white hover:text-blue-400 transition-colors">
+            <button 
+              onClick={() => navigate("/")}
+              className="text-white hover:text-blue-400 transition-colors"
+            >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <h2 className="text-[32px] font-bold text-white leading-[41px]">

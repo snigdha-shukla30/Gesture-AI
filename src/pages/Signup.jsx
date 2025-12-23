@@ -54,7 +54,9 @@ export default function Signup() {
       style={{ backgroundImage: "url('/Login/login-bg.jpg')" }}
     >
       {/* Logo */}
-      <GestureAILogo top="28px" left="46px" />
+      <div onClick={() => navigate("/")} className="cursor-pointer">
+        <GestureAILogo top="28px" left="46px" />
+      </div>
 
       <div
         className="relative shadow-2xl rounded-[16px] p-[1.5px]"
@@ -76,7 +78,10 @@ export default function Signup() {
             {/* Header */}
             <div className="flex flex-col mb-6 gap-2">
               <div className="flex items-center gap-3">
-                <button className="text-white hover:text-blue-400 transition-colors">
+                <button 
+                  onClick={() => navigate("/login")}
+                  className="text-white hover:text-blue-400 transition-colors"
+                >
                   <ChevronLeft className="w-6 h-6" />
                 </button>
                 <h2 className="text-[32px] font-bold text-white leading-[41px]">
@@ -153,9 +158,13 @@ export default function Signup() {
                   backgroundColor: "#272A38",
                 }}
               />
-              <span className="absolute right-8 top-1/2 -translate-y-1/2 text-blue-400 text-sm cursor-pointer">
+              <button
+                type="button"
+                onClick={() => navigate("/emailverification")}
+                className="absolute right-8 top-1/2 -translate-y-1/2 text-blue-400 text-sm hover:text-blue-300 transition-colors"
+              >
                 Get Verified !
-              </span>
+              </button>
             </div>
 
             {/* Password */}
@@ -212,7 +221,7 @@ export default function Signup() {
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
               >
-                {showPassword ? (
+                {showConfirmPassword ? (
                   <EyeOff className="w-5 h-5" />
                 ) : (
                   <Eye className="w-5 h-5" />

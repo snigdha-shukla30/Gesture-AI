@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { ChevronLeft, Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import GestureAILogo from "../Components/UI/Logo";
 import GradientButton from "../Components/UI/GradientButton";
 
 export default function SignupVerified() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // After account creation, navigate to home
+    navigate("/");
   };
 
   return (
@@ -17,7 +21,9 @@ export default function SignupVerified() {
       style={{ backgroundImage: "url('/Login/login-bg.jpg')" }}
     >
       {/* Logo */}
-      <GestureAILogo top="28px" left="46px" />
+      <div onClick={() => navigate("/")} className="cursor-pointer">
+        <GestureAILogo top="28px" left="46px" />
+      </div>
 
       <div
         className="relative shadow-2xl rounded-[16px] p-[1.5px]"
@@ -39,7 +45,10 @@ export default function SignupVerified() {
             {/* Header */}
             <div className="flex flex-col mb-6 gap-2">
               <div className="flex items-center gap-3">
-                <button className="text-white hover:text-blue-400 transition-colors">
+                <button 
+                  onClick={() => navigate("/signup")}
+                  className="text-white hover:text-blue-400 transition-colors"
+                >
                   <ChevronLeft className="w-6 h-6" />
                 </button>
                 <h2 className="text-[32px] font-bold text-white leading-[41px]">
@@ -174,7 +183,7 @@ export default function SignupVerified() {
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
               >
-                {showPassword ? (
+                {showConfirmPassword ? (
                   <EyeOff className="w-5 h-5" />
                 ) : (
                   <Eye className="w-5 h-5" />
@@ -190,7 +199,10 @@ export default function SignupVerified() {
             {/* Login Link */}
             <p className="text-center text-gray-300 text-sm mt-4">
               Already have an account ?{" "}
-              <button className="text-[#009CFE] hover:text-blue-300 transition-colors font-medium">
+              <button 
+                onClick={() => navigate("/login")}
+                className="text-[#009CFE] hover:text-blue-300 transition-colors font-medium"
+              >
                 Login
               </button>
             </p>

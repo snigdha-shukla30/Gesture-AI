@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Card from "../Components/UI/card";
 import GradientButton from "../Components/UI/GradientButton";
 import GestureAILogo from "../Components/UI/Logo";
 
 export default function EmailVerification() {
   const [otp, setOtp] = useState(["", "", "", ""]); // 4 digit OTP
+  const navigate = useNavigate();
 
   const handleOtpChange = (value, index) => {
     const newOtp = [...otp];
@@ -17,6 +19,15 @@ export default function EmailVerification() {
     e.preventDefault();
     const otpValue = otp.join(""); // all 4 digits as a single string
     console.log("OTP entered:", otpValue);
+    // Navigate to signup verified page after verification
+    navigate("/signupverified");
+  };
+
+  const handleResendOTP = () => {
+    // Reset OTP fields
+    setOtp(["", "", "", ""]);
+    // In a real app, you would resend the OTP here
+    console.log("Resending OTP...");
   };
 
   return (
@@ -25,13 +36,18 @@ export default function EmailVerification() {
       style={{ backgroundImage: "url('/Login/login-bg.jpg')" }}
     >
       {/* Gesture AI Logo Text */}
-      <GestureAILogo top="28px" left="46px" />
+      <div onClick={() => navigate("/")} className="cursor-pointer">
+        <GestureAILogo top="28px" left="46px" />
+      </div>
 
       <Card width="500px" height="auto">
         {/* Top Section */}
         <div className="flex flex-col mb-6 gap-2">
           <div className="flex items-center gap-3">
-            <button className="text-white hover:text-blue-400 transition-colors">
+            <button 
+              onClick={() => navigate("/signup")}
+              className="text-white hover:text-blue-400 transition-colors"
+            >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <h2 className="text-[32px] font-bold text-white leading-[41px]">
@@ -92,7 +108,10 @@ export default function EmailVerification() {
             }}
           >
             <span>Didn't receive OTP?</span>
-            <button className="mt-1 text-[#009CFE] hover:text-blue-300 transition-colors font-medium">
+            <button 
+              onClick={handleResendOTP}
+              className="mt-1 text-[#009CFE] hover:text-blue-300 transition-colors font-medium"
+            >
               Resend OTP
             </button>
           </div>

@@ -40,7 +40,9 @@ export default function ForgetPassword() {
       style={{ backgroundImage: "url('/Login/login-bg.jpg')" }}
     >
       {/* Gesture AI Logo Text */}
-       <GestureAILogo top="28px" left="46px" />
+      <div onClick={() => navigate("/")} className="cursor-pointer">
+        <GestureAILogo top="28px" left="46px" />
+      </div>
 
       <Card width="500px" height="auto">
         {/* Top Section */}
