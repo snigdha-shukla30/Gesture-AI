@@ -1,6 +1,30 @@
 import { useState } from "react";
 import LeftSidebar from "../Components/CallPage/Leftsidebar";
 import GestureAILogo from "../Components/UI/Logo";
+import { callBackend } from "../api/api"; // ⭐
+
+function settings() {
+
+  const connectBackend = async () => { // ⭐
+    try {
+      const res = await callBackend({ page: "Settings" });
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Settings</h1>
+
+      <button onClick={connectBackend}>Save Settings</button> {/* ⭐ */}
+    </div>
+  );
+}
+
+
+
 
 export default function Settings() {
   const [mobilePush, setMobilePush] = useState(false);

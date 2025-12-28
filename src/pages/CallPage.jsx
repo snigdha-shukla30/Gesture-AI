@@ -2,6 +2,30 @@ import React, { useState } from "react";
 import LeftSidebar from "../Components/CallPage/Leftsidebar";
 import GestureAILogo from "../Components/UI/Logo";
 import RightSidebar from "../Components/CallPage/RightSidebar";
+import { callBackend } from "../api/api"; // ⭐ ADDED
+
+function callPage() {
+
+  const connectBackend = async () => { // ⭐ ADDED
+    try {
+      const res = await callBackend({ page: "CallPage" });
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Call Page</h1>
+
+      <button onClick={connectBackend}>Connect Backend</button> {/* ⭐ */}
+    </div>
+  );
+}
+
+
+
 
 export default function CallPage() {
   const [messages] = useState([

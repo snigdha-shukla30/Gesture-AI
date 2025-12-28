@@ -4,6 +4,30 @@ import { useNavigate } from "react-router-dom";
 import Card from "../Components/UI/card";
 import GradientButton from "../Components/UI/GradientButton";
 import GestureAILogo from "../Components/UI/Logo";
+import { callBackend } from "../api/api"; // ⭐
+
+function emailVerification() {
+
+  const connectBackend = async () => { // ⭐
+    try {
+      const res = await callBackend({ page: "EmailVerification" });
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Email Verification</h1>
+
+      <button onClick={connectBackend}>Verify via Backend</button> {/* ⭐ */}
+    </div>
+  );
+}
+
+
+
 
 export default function EmailVerification() {
   const [otp, setOtp] = useState(["", "", "", ""]); // 4 digit OTP

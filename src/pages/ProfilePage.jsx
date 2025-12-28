@@ -1,6 +1,30 @@
 
 import LeftSidebar from "../Components/CallPage/Leftsidebar";
 import GestureAILogo from "../Components/UI/Logo";
+import { callBackend } from "../api/api"; // ⭐
+
+function profilePage() {
+
+  const connectBackend = async () => { // ⭐
+    try {
+      const res = await callBackend({ page: "ProfilePage" });
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Profile</h1>
+
+      <button onClick={connectBackend}>Load Profile</button> {/* ⭐ */}
+    </div>
+  );
+}
+
+
+
 
 export default function Profile() {
  

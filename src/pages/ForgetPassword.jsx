@@ -5,6 +5,30 @@ import Card from "../Components/UI/card";
 import GradientButton from "../Components/UI/GradientButton";
 import GestureAILogo from "../Components/UI/Logo";
 import { useAuth } from "../contexts/AuthContext";
+import { callBackend } from "../api/api"; // ⭐
+
+function forgetPassword() {
+
+  const connectBackend = async () => { // ⭐
+    try {
+      const res = await callBackend({ page: "ForgetPassword" });
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Forget Password</h1>
+
+      <button onClick={connectBackend}>Connect Backend</button> {/* ⭐ */}
+    </div>
+  );
+}
+
+
+
 
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");
