@@ -59,11 +59,22 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      const { error } = await signUp(email, password);
+      const { data, error } = await signUp(email, password);
       if (error) {
         setError(error.message);
       } else {
-        navigate("/signupverified");
+        // Check if email confirmation is required
+        if (data?.user && !data.user.email_confirmed_at) {
+          // Email confirmation required - show message but still redirect
+          setError("Please check your email to verify your account. You can still use the app.");
+          // Wait a moment then redirect to callpage
+          setTimeout(() => {
+            navigate("/callpage");
+          }, 2000);
+        } else {
+          // Account created successfully - redirect to callpage
+          navigate("/callpage");
+        }
       }
     } catch (err) {
       setError("An unexpected error occurred");

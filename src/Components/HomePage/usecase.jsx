@@ -1,7 +1,11 @@
 import React, { useEffect, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function UseCase() {
   const useCaseRef = useRef(null);
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -214,6 +218,13 @@ export default function UseCase() {
           }}
         >
           <button
+            onClick={() => {
+              if (user) {
+                navigate('/callpage');
+              } else {
+                navigate('/login');
+              }
+            }}
             className="flex items-center justify-center gap-2.5 text-white rounded-lg hover:scale-105 transition-transform duration-300"
             style={{
               background: "linear-gradient(90deg, #345DB7 0%, #26255A 100%)",
@@ -221,6 +232,7 @@ export default function UseCase() {
               fontWeight: 600,
               fontSize: "16px",
               padding: "14px 32px",
+              cursor: 'pointer',
             }}
           >
             See Gesture AI in Action

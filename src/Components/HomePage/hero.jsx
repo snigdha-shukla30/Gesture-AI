@@ -1,7 +1,11 @@
 import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function GestureAIHero() {
   const heroRef = useRef(null);
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     const elements = heroRef.current?.querySelectorAll('[data-animate]');
@@ -110,6 +114,13 @@ export default function GestureAIHero() {
           >
 
               <button
+              onClick={() => {
+                if (user) {
+                  navigate('/callpage');
+                } else {
+                  navigate('/login');
+                }
+              }}
               className="px-6 py-3 text-white rounded-lg font-medium"
               style={{
                 background: 'linear-gradient(90deg, #345DB7 0%, #26255A 100%)',

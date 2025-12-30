@@ -53,11 +53,19 @@ export const AuthProvider = ({ children }) => {
     if (!supabase) {
       return { data: null, error: missingSupabaseError() };
     }
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { data, error };
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim().toLowerCase(),
+        password,
+      });
+      return { data, error };
+    } catch (err) {
+      console.error('Sign in error:', err);
+      return { 
+        data: null, 
+        error: { message: err.message || 'Failed to sign in. Please try again.' } 
+      };
+    }
   };
 
   const signOut = async () => {

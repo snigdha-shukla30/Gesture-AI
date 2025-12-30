@@ -44,15 +44,34 @@ export default function LoginCard() {
     setError("");
     setLoading(true);
 
+    // Basic validation
+    if (!email || !password) {
+      setError("Please enter both email and password");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const { error } = await signIn(email, password);
+      const { data, error } = await signIn(email, password);
       if (error) {
-        setError(error.message);
+        // More user-friendly error messages
+        if (error.message.includes("Invalid login credentials")) {
+          setError("Invalid email or password. Please check your credentials or sign up if you don't have an account.");
+        } else if (error.message.includes("Email not confirmed")) {
+          setError("Please verify your email address before logging in. Check your inbox for the confirmation email.");
+        } else {
+          setError(error.message || "Login failed. Please try again.");
+        }
+        console.error("Login error:", error);
+      } else if (data?.user) {
+        // Successfully logged in
+        navigate("/callpage");
       } else {
-        navigate("/");
+        setError("Login failed. Please try again.");
       }
     } catch (err) {
-      setError("An unexpected error occurred");
+      console.error("Unexpected error:", err);
+      setError("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }

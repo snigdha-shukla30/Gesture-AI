@@ -35,8 +35,8 @@ export default function SignupVerified() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // After account creation, navigate to home
-    navigate("/");
+    // After account creation, navigate to callpage
+    navigate("/callpage");
   };
 
   return (
