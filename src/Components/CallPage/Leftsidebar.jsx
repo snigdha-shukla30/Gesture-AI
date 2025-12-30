@@ -1,8 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Home, Video, Settings, User } from "lucide-react";
 
 export default function LeftSidebar() {
-  const [active, setActive] = useState("home");
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Determine active state based on current route
+  const getActiveId = () => {
+    if (location.pathname === "/ProfilePage") return "user";
+    if (location.pathname === "/Settings") return "settings";
+    if (location.pathname === "/callpage") return "video";
+    if (location.pathname === "/home") return "home";
+    return "video"; // default to video for callpage
+  };
+
+  const [active, setActive] = useState(() => {
+    // Initialize based on current pathname
+    if (location.pathname === "/ProfilePage") return "user";
+    if (location.pathname === "/Settings") return "settings";
+    if (location.pathname === "/callpage") return "video";
+    if (location.pathname === "/home") return "home";
+    return "video";
+  });
+
+  // Update active state when route changes
+  useEffect(() => {
+    if (location.pathname === "/ProfilePage") {
+      setActive("user");
+    } else if (location.pathname === "/Settings") {
+      setActive("settings");
+    } else if (location.pathname === "/callpage") {
+      setActive("video");
+    } else if (location.pathname === "/home") {
+      setActive("home");
+    } else {
+      setActive("video");
+    }
+  }, [location.pathname]);
+
+  const handleNavigation = (id) => {
+    setActive(id);
+    switch (id) {
+      case "home":
+        navigate("/home");
+        break;
+      case "video":
+        navigate("/callpage");
+        break;
+      case "user":
+        navigate("/ProfilePage");
+        break;
+      case "settings":
+        navigate("/Settings");
+        break;
+      default:
+        break;
+    }
+  };
 
   const buttons = [
     { id: "home", icon: Home, label: "Home" },
@@ -32,7 +87,7 @@ export default function LeftSidebar() {
       >
         {/* Top Button (Home) */}
         <button
-          onClick={() => setActive("home")}
+          onClick={() => handleNavigation("home")}
           className={`flex items-center justify-center transition-all duration-300 ease-in-out ${
             active === "home"
               ? "w-[87px] h-[52px] bg-[#0C1127] border border-[#8B7F7F] rounded-[10px]"
@@ -56,7 +111,7 @@ export default function LeftSidebar() {
             return (
               <button
                 key={btn.id}
-                onClick={() => setActive(btn.id)}
+                onClick={() => handleNavigation(btn.id)}
                 className={`flex items-center justify-center transition-all duration-300 ease-in-out ${
                   active === btn.id
                     ? "w-[87px] h-[52px] bg-[#0C1127] border border-[#8B7F7F] rounded-[10px]"
