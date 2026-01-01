@@ -1,28 +1,8 @@
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import LeftSidebar from "../Components/CallPage/Leftsidebar";
 import GestureAILogo from "../Components/UI/Logo";
-import { callBackend } from "../api/api"; // ⭐
-
-function settings() {
-
-  const connectBackend = async () => { // ⭐
-    try {
-      const res = await callBackend({ page: "Settings" });
-      console.log(res);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  return (
-    <div>
-      <h1>Settings</h1>
-
-      <button onClick={connectBackend}>Save Settings</button> {/* ⭐ */}
-    </div>
-  );
-}
-
+// removed test backend connector
 
 
 
@@ -58,43 +38,7 @@ export default function Settings() {
         }}
       >
         {/* small circular avatar */}
-        <div
-          className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0"
-          style={{
-            boxShadow: "0 4px 10px rgba(0,0,0,0.6)",
-            border: "1px solid rgba(255,255,255,0.06)",
-          }}
-        >
-          <img
-            src="/Login/callimage.jpg"
-            alt="avatar"
-            className="w-full h-full object-cover rounded-full"
-          />
-        </div>
-
-        {/* Hello + name stacked */}
-        <div className="text-right">
-          <div
-            style={{
-              fontFamily: "'Paprika', sans-serif",
-              fontWeight: 400,
-              fontSize: 26,
-              lineHeight: "100%",
-              color: "#FFFFFF",
-            }}
-          >
-            Hello
-          </div>
-          <div
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: 13,
-              color: "#9BE0FF",
-            }}
-          >
-            Ayush
-          </div>
-        </div>
+        <AuthHello />
       </div>
       {/* --------------------------------------------- */}
 
@@ -381,5 +325,49 @@ export default function Settings() {
         </div>
       </div>
     </div>
+  );
+}
+
+function AuthHello() {
+  const { user } = useAuth();
+  const meta = user?.user_metadata || {};
+  const avatar = meta.avatar_url || '/Login/callimage.jpg';
+  const name = meta.full_name || meta.name || user?.email || 'User';
+
+  return (
+    <>
+      <div
+        className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0"
+        style={{
+          boxShadow: '0 4px 10px rgba(0,0,0,0.6)',
+          border: '1px solid rgba(255,255,255,0.06)',
+        }}
+      >
+        <img src={avatar} alt="avatar" className="w-full h-full object-cover rounded-full" />
+      </div>
+
+      <div className="text-right">
+        <div
+          style={{
+            fontFamily: "'Paprika', sans-serif",
+            fontWeight: 400,
+            fontSize: 26,
+            lineHeight: '100%',
+            color: '#FFFFFF',
+          }}
+        >
+          Hello
+        </div>
+        <div
+          style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: 13,
+            color: '#9BE0FF',
+          }}
+        >
+          {name}
+        </div>
+      </div>
+    </>
   );
 }

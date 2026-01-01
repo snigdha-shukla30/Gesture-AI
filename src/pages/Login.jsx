@@ -5,30 +5,7 @@ import Card from "../Components/UI/card";
 import GradientButton from "../Components/UI/GradientButton";
 import GestureAILogo from "../Components/UI/Logo";
 import { useAuth } from "../contexts/AuthContext";
-import { callBackend } from "../api/api"; // ⭐
-
-function login() {
-
-  const connectBackend = async () => { // ⭐
-    try {
-      const res = await callBackend({ page: "Login" });
-      console.log(res);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  return (
-    <div>
-      <h1>Login</h1>
-
-      <button onClick={connectBackend}>Login Backend</button> {/* ⭐ */}
-    </div>
-  );
-}
-
-
-
+// removed test backend connector
 
 export default function LoginCard() {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,6 +14,7 @@ export default function LoginCard() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
+  const { signInWithProvider } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -210,7 +188,16 @@ export default function LoginCard() {
         {/* Social Icons */}
         <div className="flex justify-center items-center gap-6 flex-wrap">
           {/* Google */}
-          <button className="w-12 h-12 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+          <button
+            className="w-12 h-12 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+            onClick={async () => {
+              try {
+                await signInWithProvider('google');
+              } catch (err) {
+                console.error('Google sign-in error', err);
+              }
+            }}
+          >
             <svg className="w-6 h-6" viewBox="0 0 24 24">
               <path
                 fill="#4285F4"

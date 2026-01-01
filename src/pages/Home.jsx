@@ -7,33 +7,7 @@ import UseCase from '../Components/HomePage/usecase';
 import Footer from '../Components/HomePage/footer';
 
 
-import { callBackend } from "../api/api"; // ⭐ ADDED
-
-function home() {
-
-  const connectBackend = async () => { // ⭐ ADDED
-    try {
-      const res = await callBackend({ page: "Home" });
-      console.log(res);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  return (
-    <div>
-      <h1>Home</h1>
-
-      <button
-  onClick={connectBackend}
-  style={{ marginTop: "90px", marginLeft: "20px" }}
->
-  Connect Backend
-</button>
-
-    </div>
-  );
-}
+// removed test backend connector
 
 
 

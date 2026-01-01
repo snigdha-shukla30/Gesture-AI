@@ -1,37 +1,40 @@
 
+import React from "react";
 import LeftSidebar from "../Components/CallPage/Leftsidebar";
+import { uploadAvatar } from "../lib/supabase";
 import GestureAILogo from "../Components/UI/Logo";
 import { callBackend } from "../api/api"; // ⭐
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-function profilePage() {
-
-  const connectBackend = async () => { // ⭐
-    try {
-      const res = await callBackend({ page: "ProfilePage" });
-      console.log(res);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  return (
-    <div>
-      <h1>Profile</h1>
-
-      <button onClick={connectBackend}>Load Profile</button> {/* ⭐ */}
-    </div>
-  );
-}
-
-
-
+// removed test backend connector
 
 export default function Profile() {
  
-  const { signOut } = useAuth();
+  const { user, signOut, updateProfile } = useAuth();
   const navigate = useNavigate();
+
+  const [editing, setEditing] = React.useState(false);
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [emailAddr, setEmailAddr] = React.useState('');
+  const [phoneCountry, setPhoneCountry] = React.useState('+91');
+  const [phoneNumber, setPhoneNumber] = React.useState('');
+  const [avatarUrl, setAvatarUrl] = React.useState('');
+  const [uploading, setUploading] = React.useState(false);
+  const fileInputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!user) return;
+    const meta = user.user_metadata || {};
+    const fullName = meta.full_name || meta.name || '';
+    const parts = fullName.trim().split(' ');
+    setFirstName(parts[0] || '');
+    setLastName(parts.slice(1).join(' ') || '');
+    setEmailAddr(user.email || '');
+    setPhoneNumber(meta.phone || '');
+    setAvatarUrl(meta.avatar_url || '');
+  }, [user]);
 
   const handleLogout = async () => {
     try {
@@ -60,7 +63,7 @@ export default function Profile() {
       {/* Gesture AI Logo */}
       <GestureAILogo top="28px" left="110px" />
 
-      {/* ---- Hello Section (moved outside big box) ---- */}
+        {/* ---- Hello Section (moved outside big box) ---- */}
       <div
         className="absolute flex items-center space-x-3"
         style={{
@@ -78,7 +81,7 @@ export default function Profile() {
           }}
         >
           <img
-            src="/src/assets/login-logos/call image.jpg"
+            src={avatarUrl || '/src/assets/login-logos/call image.jpg'}
             alt="avatar"
             className="w-full h-full object-cover rounded-full"
           />
@@ -104,7 +107,7 @@ export default function Profile() {
               color: "#9BE0FF",
             }}
           >
-            Ayush
+            {firstName || emailAddr || 'User'}
           </div>
         </div>
       </div>
@@ -137,6 +140,32 @@ export default function Profile() {
             />
             
             {/* Upload button at bottom */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file || !user) return;
+                setUploading(true);
+                const { publicUrl, error } = await uploadAvatar(user.id || user?.id, file);
+                if (error) {
+                  console.error('Avatar upload error', error);
+                  setUploading(false);
+                  return;
+                }
+                setAvatarUrl(publicUrl || '');
+                // persist to user metadata
+                try {
+                  await updateProfile({ avatar_url: publicUrl });
+                } catch (err) {
+                  console.error('Failed to save avatar to profile', err);
+                }
+                setUploading(false);
+              }}
+            />
+
             <button
               className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm"
               style={{
@@ -146,12 +175,13 @@ export default function Profile() {
                 color: "#D1D5DB",
                 fontFamily: "'Poppins', sans-serif",
               }}
+              onClick={() => fileInputRef.current?.click()}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              Upload your profile picture
+              {uploading ? 'Uploading...' : 'Upload your profile picture'}
             </button>
           </div>
         </div>
@@ -205,8 +235,9 @@ export default function Profile() {
                   fontFamily: "'Poppins', sans-serif",
                   backgroundColor: "transparent",
                 }}
+                onClick={() => setEditing((s) => !s)}
               >
-                Edit ✏️
+                {editing ? 'Cancel' : 'Edit ✏️'}
               </button>
             </div>
 
@@ -221,7 +252,9 @@ export default function Profile() {
                 </label>
                 <input
                   type="text"
-                  placeholder="Ayush"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  disabled={!editing}
                   className="w-full h-[49px] px-4 text-md placeholder-gray-500 text-gray-100 rounded-[10px] outline-none"
                   style={{
                     border: "1.5px solid",
@@ -244,7 +277,9 @@ export default function Profile() {
                 </label>
                 <input
                   type="text"
-                  placeholder="Prajapati"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  disabled={!editing}
                   className="w-full h-[49px] px-4 text-md placeholder-gray-600 text-gray-100 rounded-[10px] outline-none"
                   style={{
                     border: "1.5px solid",
@@ -270,7 +305,9 @@ export default function Profile() {
                 </label>
                 <input
                   type="email"
-                  placeholder="ayushprajapati574@gmail.com"
+                  value={emailAddr}
+                  onChange={(e) => setEmailAddr(e.target.value)}
+                  disabled
                   className="w-full h-[49px] px-4 text-md placeholder-gray-600 text-gray-100 rounded-[10px] outline-none"
                   style={{
                     border: "1.5px solid",
@@ -294,7 +331,9 @@ export default function Profile() {
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="+91"
+                    value={phoneCountry}
+                    onChange={(e) => setPhoneCountry(e.target.value)}
+                    disabled={!editing}
                     className="w-16 h-[49px] px-3 text-md placeholder-gray-600 text-gray-100 rounded-[10px] outline-none text-center"
                     style={{
                       border: "1.5px solid",
@@ -308,7 +347,9 @@ export default function Profile() {
                   />
                   <input
                     type="tel"
-                    placeholder="8112398739"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    disabled={!editing}
                     className="flex-1 h-[49px] px-4 text-md placeholder-gray-600 text-gray-100 rounded-[10px] outline-none"
                     style={{
                       border: "1.5px solid",
@@ -373,7 +414,35 @@ export default function Profile() {
               </div>
             </div>
 
-            {/* Logout button bottom-right */}
+            {/* Save button when editing + Logout button bottom-right */}
+            {editing && (
+              <div className="absolute right-36 bottom-6">
+                <button
+                  className="px-6 py-2.5 rounded-full shadow flex items-center gap-2"
+                  style={{
+                    background: "linear-gradient(90deg,#34D399,#10B981)",
+                    color: "#08102A",
+                    fontWeight: 600,
+                    fontFamily: "'Poppins', sans-serif",
+                  }}
+                  onClick={async () => {
+                    const profileData = {
+                      full_name: `${firstName} ${lastName}`.trim(),
+                      phone: phoneNumber,
+                      avatar_url: avatarUrl,
+                    };
+                    const { error } = await updateProfile(profileData);
+                    if (error) {
+                      console.error('Profile update error', error);
+                    } else {
+                      setEditing(false);
+                    }
+                  }}
+                >
+                  Save
+                </button>
+              </div>
+            )}
             <div className="absolute right-10 bottom-6">
               <button
                 className="px-6 py-2.5 rounded-full shadow flex items-center gap-2"

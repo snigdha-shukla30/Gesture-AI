@@ -3,16 +3,49 @@ import LeftSidebar from "../Components/CallPage/Leftsidebar";
 import GestureAILogo from "../Components/UI/Logo";
 import RightSidebar from "../Components/CallPage/RightSidebar";
 import { callBackend } from "../api/api";
+import { useAuth } from "../contexts/AuthContext";
+
+function UserHeader() {
+  const { user } = useAuth();
+  const meta = user?.user_metadata || {};
+  const avatar = meta.avatar_url || "/Login/callimage.jpg";
+  const displayName = meta.full_name || meta.name || user?.email || "User";
+
+  return (
+    <>
+      <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+        <img src={avatar} alt="avatar" className="w-full h-full object-cover rounded-full" />
+      </div>
+
+      <div>
+        <div
+          style={{
+            fontFamily: "'Paprika', sans-serif",
+            fontWeight: 400,
+            fontSize: "30px",
+            lineHeight: "100%",
+            letterSpacing: "0%",
+            color: "#FFFFFF",
+          }}
+        >
+          Hello
+        </div>
+        <div
+          style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: "15px",
+            color: "#009CFE",
+          }}
+        >
+          {displayName}
+        </div>
+      </div>
+    </>
+  );
+}
 
 export default function CallPage() {
-  const [messages, setMessages] = useState([
-    "Hey!",
-    "Just wanted to check if you reached safely.",
-    "The traffic was insane today, I hope you didn't get stuck",
-    "Also, don't forget we have that meeting tomorrow at 10.",
-    "By the way, I found that café you were talking about... looks amazing",
-    "Sending you the link rn",
-  ]);
+  const [messages, setMessages] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
   const [currentGesture, setCurrentGesture] = useState("");
   const videoRef = useRef(null);
@@ -157,13 +190,13 @@ export default function CallPage() {
               />
               
               {/* Placeholder image when not recording */}
-              {!isRecording && (
-                <img
-                  src="/Login/callimage.jpg"
-                  alt="Person using sign language"
-                  className="w-full h-full object-cover"
-                />
-              )}
+                  {!isRecording && (
+                    <img
+                      src="/Login/callimage.jpg"
+                      alt="Person using sign language"
+                      className="w-full h-full object-cover"
+                    />
+                  )}
 
               {/* Canvas for capturing frames (hidden) */}
               <canvas ref={canvasRef} style={{ display: "none" }} />
@@ -198,37 +231,7 @@ export default function CallPage() {
         {/* Chat Header */}
         <div className="flex items-center space-x-3 p-4">
           {/* Avatar */}
-          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-            <img
-              src="/Login/callimage.jpg"
-              alt="Person using sign language"
-              className="w-full h-full object-cover rounded-full"
-            />
-          </div>
-
-          <div>
-            <div
-              style={{
-                fontFamily: "'Paprika', sans-serif",
-                fontWeight: 400,
-                fontSize: "30px",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                color: "#FFFFFF",
-              }}
-            >
-              Hello
-            </div>
-            <div
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "15px",
-                color: "#009CFE",
-              }}
-            >
-              Gesture AI
-            </div>
-          </div>
+          <UserHeader />
         </div>
 
         {/* Chat Area */}

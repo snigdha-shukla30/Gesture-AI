@@ -3,27 +3,7 @@ import { ChevronLeft, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import GestureAILogo from "../Components/UI/Logo";
 import GradientButton from "../Components/UI/GradientButton";
-import { callBackend } from "../api/api"; // ⭐
-
-function signupVerified() {
-
-  const connectBackend = async () => { // ⭐
-    try {
-      const res = await callBackend({ page: "SignupVerified" });
-      console.log(res);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  return (
-    <div>
-      <h1>Signup Verified</h1>
-
-      <button onClick={connectBackend}>Continue</button> {/* ⭐ */}
-    </div>
-  );
-}
+// removed test backend connector
 
 
 

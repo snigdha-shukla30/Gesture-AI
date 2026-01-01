@@ -73,7 +73,34 @@ export const AuthProvider = ({ children }) => {
       return { error: missingSupabaseError() };
     }
     const { error } = await supabase.auth.signOut();
+    if (!error) setUser(null);
     return { error };
+  };
+
+  const signInWithProvider = async (provider) => {
+    if (!supabase) {
+      return { error: missingSupabaseError() };
+    }
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({ provider });
+      return { data, error };
+    } catch (err) {
+      return { data: null, error: err };
+    }
+  };
+
+  const updateProfile = async (profileData) => {
+    if (!supabase) {
+      return { data: null, error: missingSupabaseError() };
+    }
+    try {
+      const { data, error } = await supabase.auth.updateUser({ data: profileData });
+      if (!error && data?.user) setUser(data.user);
+      return { data, error };
+    } catch (err) {
+      console.error('updateProfile error:', err);
+      return { data: null, error: err };
+    }
   };
 
   const resetPassword = async (email) => {
@@ -92,6 +119,8 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signIn,
     signOut,
+    signInWithProvider,
+    updateProfile,
     resetPassword,
   };
 

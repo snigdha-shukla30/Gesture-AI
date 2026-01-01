@@ -4,27 +4,7 @@ import { useNavigate } from "react-router-dom";
 import GestureAILogo from "../Components/UI/Logo";
 import GradientButton from "../Components/UI/GradientButton";
 import { useAuth } from "../contexts/AuthContext";
-import { callBackend } from "../api/api"; // ⭐
-
-function signup() {
-
-  const connectBackend = async () => { // ⭐
-    try {
-      const res = await callBackend({ page: "Signup" });
-      console.log(res);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  return (
-    <div>
-      <h1>Signup</h1>
-
-      <button onClick={connectBackend}>Signup Backend</button> {/* ⭐ */}
-    </div>
-  );
-}
+// removed test backend connector
 
 
 
