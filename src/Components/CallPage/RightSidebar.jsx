@@ -84,7 +84,7 @@ export default function RightSidebar({ messages }) {
             gap: '25px',
           }}
         >
-          {messages.map((msg, idx) => (
+          {messages.slice(-50).map((msg, idx) => (
             <div
               key={idx}
               style={{

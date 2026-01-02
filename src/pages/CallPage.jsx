@@ -52,6 +52,24 @@ export default function CallPage() {
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
   const intervalRef = useRef(null);
+  const [showDetection, setShowDetection] = useState(false);
+  const flashTimerRef = useRef(null);
+  const lastAddedRef = useRef({});
+  const bufferRef = useRef([]);
+  const bufferTimerRef = useRef(null);
+  const DEBOUNCE_MS = 2500;
+  const BUFFER_FLUSH_MS = 1500;
+
+  const TRANSLATION_MAP = {
+    HELLO: "Hello",
+    "THANK YOU": "Thank you",
+    YES: "Yes",
+    NO: "No",
+    PLEASE: "Please",
+    SORRY: "Sorry",
+    GOODBYE: "Goodbye",
+    "HOW ARE YOU": "How are you",
+  };
 
   // Start/Stop webcam
   const startWebcam = async () => {
@@ -81,6 +99,14 @@ export default function CallPage() {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
+    if (bufferTimerRef.current) {
+      clearTimeout(bufferTimerRef.current);
+      bufferTimerRef.current = null;
+    }
+    if (flashTimerRef.current) {
+      clearTimeout(flashTimerRef.current);
+      flashTimerRef.current = null;
+    }
     setIsRecording(false);
     setCurrentGesture("");
   };
@@ -93,15 +119,20 @@ export default function CallPage() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
-    // Set canvas size to match video
-    canvas.width = video.videoWidth || 1020;
-    canvas.height = video.videoHeight || 576;
-
-    // Draw video frame to canvas
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    // Convert canvas to base64 image
-    const imageData = canvas.toDataURL("image/jpeg", 0.8);
+    // Resize captured frame to reduce payload
+    const MAX_W = 640;
+    const MAX_H = 360;
+    const vidW = video.videoWidth || 1020;
+    const vidH = video.videoHeight || 576;
+    const scale = Math.min(1, MAX_W / vidW, MAX_H / vidH);
+    const w = Math.max(1, Math.round(vidW * scale));
+    const h = Math.max(1, Math.round(vidH * scale));
+    canvas.width = w;
+    canvas.height = h;
+    // Draw scaled frame
+    ctx.drawImage(video, 0, 0, w, h);
+    // compressed JPEG to reduce network
+    const imageData = canvas.toDataURL("image/jpeg", 0.6);
 
     try {
       // Send to backend for gesture recognition
@@ -111,16 +142,34 @@ export default function CallPage() {
       });
 
       if (response && response.gesture) {
-        setCurrentGesture(response.gesture);
-        
-        // Add new gesture translation to messages
-        setMessages((prev) => {
-          // Only add if it's different from the last message to avoid duplicates
-          if (prev.length === 0 || prev[prev.length - 1] !== response.gesture) {
-            return [...prev, response.gesture];
-          }
-          return prev;
-        });
+        const gesture = response.gesture;
+        setCurrentGesture(gesture);
+
+        const now = Date.now();
+        const lastTime = lastAddedRef.current[gesture] || 0;
+        const lastMsg = messages.length ? messages[messages.length - 1] : null;
+
+        if (lastMsg !== gesture && now - lastTime > DEBOUNCE_MS) {
+          lastAddedRef.current[gesture] = now;
+
+          // buffer tokens to form sentences
+          bufferRef.current.push(gesture);
+
+          if (bufferTimerRef.current) clearTimeout(bufferTimerRef.current);
+          bufferTimerRef.current = setTimeout(() => {
+            const tokens = bufferRef.current.slice();
+            bufferRef.current = [];
+            bufferTimerRef.current = null;
+            const words = tokens.map((t) => TRANSLATION_MAP[t] || t);
+            const sentence = words.join(" ").trim();
+            if (sentence) setMessages((prev) => [...prev, sentence]);
+          }, BUFFER_FLUSH_MS);
+
+          // brief visual indicator
+          setShowDetection(true);
+          if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+          flashTimerRef.current = setTimeout(() => setShowDetection(false), 700);
+        }
       }
     } catch (error) {
       console.error("Error detecting gesture:", error);
@@ -129,8 +178,9 @@ export default function CallPage() {
 
   // Start gesture detection loop
   const startGestureDetection = () => {
-    // Capture and detect every 2 seconds
-    intervalRef.current = setInterval(captureAndDetect, 2000);
+    // Capture and detect every 1 second
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(captureAndDetect, 1000);
   };
 
   // Cleanup on unmount
@@ -220,6 +270,14 @@ export default function CallPage() {
                 <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-lg">
                   Gesture: {currentGesture}
                 </div>
+              )}
+
+              {/* Detection indicator */}
+              {showDetection && (
+                <div
+                  className="absolute top-4 right-6 rounded-full"
+                  style={{ width: 12, height: 12, background: '#00E0FF', boxShadow: '0 0 10px #00E0FF' }}
+                />
               )}
             </div>
           </div>
