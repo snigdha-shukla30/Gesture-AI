@@ -38,8 +38,8 @@ function RootRoute() {
     return <Navigate to="/callpage" replace />;
   }
 
-  // If not logged in, redirect to login
-  return <Navigate to="/login" replace />;
+  // If not logged in, show the Home page so users can click Login/Signup
+  return <Home />;
 }
 
 // Email verification route component - allows unverified users, redirects verified users
