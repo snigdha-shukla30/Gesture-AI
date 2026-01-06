@@ -7,10 +7,6 @@ import UseCase from '../Components/HomePage/usecase';
 import Footer from '../Components/HomePage/footer';
 
 
-// removed test backend connector
-
-
-
 
 
 export default function Home() {
